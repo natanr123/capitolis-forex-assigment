@@ -18,15 +18,9 @@ import * as actions from './actions';
 
 /* eslint-disable react/prefer-stateless-function */
 export class ForexPage extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = { storeListing: { title: '', shortDescription: '', fullDescription: '' } };
-  }
-
 
   componentDidMount() {
-    this.props.loadPosition();
-    this.props.loadUnits();
+    this.props.startRefreshCycle(10000);
   }
 
   render() {
@@ -54,6 +48,9 @@ export class ForexPage extends React.PureComponent {
             content="Positions page"
           />
         </Helmet>
+        <p>
+          <h3>{`Last Refresh: ${this.props.refreshTime}`}</h3>
+        </p>
         <div>
           <h3>Positions</h3>
           <JsonTable columns={positionsColumns} rows={ this.props.positions } />
@@ -77,22 +74,30 @@ export function mapDispatchToProps(dispatch) {
     },
     loadUnits: () => {
       dispatch(actions.loadUnits());
-    }
+    },
+    startRefreshCycle: (interval) => {
+      dispatch(actions.startRefreshCycle(interval));
+    },
   };
 }
+
+
+const mapStateToProps = (state) => {
+  return {
+    positions: state.get('forex').get('positions'),
+    units: state.get('forex').get('units'),
+    refreshTime: state.get('forex').get('refreshTime'),
+  };
+};
+
 
 ForexPage.propTypes = {
   loadPosition: PropTypes.func,
   loadUnits: PropTypes.func,
+  startRefreshCycle: PropTypes.func,
   positions: PropTypes.any,
   units: PropTypes.any,
-};
-
-const mapStateToProps = (state, ownProps) => {
-  return {
-    positions: state.get('forex').get('positions'),
-    units: state.get('forex').get('units'),
-  };
+  refreshTime: PropTypes.number,
 };
 
 const withConnect = connect(

@@ -6,8 +6,10 @@ class Currency {
     this.rate = rate;
   }
 
-  /*
-  Only after we init the currencies we can use this class
+  /**
+   * Only after we init the currencies we can use this class
+   * In real life we need to revalidate the cache every 10 seconds
+   * @returns {Promise<null>}
    */
   static async init() {
     if (Currency.cached) {
@@ -16,7 +18,7 @@ class Currency {
     }
     const fixerUrl = 'http://data.fixer.io/api/latest?access_key=c3cf4fa562b16d176f7462c0c30496f4&format=1';
     console.log('calling fixer api');
-    const response = await axios.get(fixerUrl)
+    const response = await axios.get(fixerUrl);
     const { data } = response;
     const baseRates = data.rates;
     const baseToUSD = data.rates.USD;

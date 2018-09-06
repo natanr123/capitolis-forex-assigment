@@ -28,3 +28,17 @@ export function unitsLoaded(units) {
     units
   };
 }
+
+export function startRefreshCycle(interval) {
+  return {
+    type: constants.START_REFRESH_CYCLE,
+    interval
+  };
+}
+
+export function refreshed() {
+  return {
+    type: constants.REFRESHED,
+    refreshTime: new Date(),
+  };
+}

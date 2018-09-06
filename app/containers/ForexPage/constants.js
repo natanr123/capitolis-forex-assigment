@@ -9,3 +9,11 @@ export const LOAD_UNITS =
 
 export const UNITS_LOADED =
   'boilerplate/ForexPage/UNITS_LOADED';
+
+
+export const START_REFRESH_CYCLE =
+  'boilerplate/ForexPage/START_REFRESH_CYCLE';
+
+export const REFRESHED =
+  'boilerplate/ForexPage/REFRESHED';
+
