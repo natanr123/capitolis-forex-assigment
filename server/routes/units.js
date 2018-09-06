@@ -1,6 +1,5 @@
 const express = require('express');
 const models = require('./../models');
-const Currency = require('./../models/Currency');
 const initCurrencyMiddleware = require('./../middlewares/initCurrencyMiddleware');
 
 const router = express.Router();
@@ -10,7 +9,7 @@ function list(req, res) {
   const rows = units.map((unit) =>{
     const positions = unit.positions();
     const positionsCount = positions.length;
-    const positionsSum = Currency.money(unit.sumPositions());
+    const positionsSum = models.Currency.money(unit.sumPositions());
     return {
       name: unit.name,
       positionsCount,

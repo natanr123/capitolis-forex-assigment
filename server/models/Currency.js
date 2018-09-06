@@ -8,11 +8,11 @@ class Currency {
 
   /**
    * Only after we init the currencies we can use this class
-   * In real life we need to revalidate the cache every 10 seconds
+   * In real life it may be better to revalidate the cache by worker
    * @returns {Promise<null>}
    */
   static async init() {
-    if (Currency.cached) {
+    if (Currency.cached && ((Date.now() - Currency.cachingTime) >= 10000)) {
       console.log('currencies have already been cached');
       return Currency.cached;
     }
@@ -24,6 +24,7 @@ class Currency {
     const baseToUSD = data.rates.USD;
     const keys = Object.keys(baseRates);
     Currency.cached = keys.map((key) => {
+      Currency.cachingTime = Date.now();
       const value = baseRates[key];
       return new Currency(key, baseToUSD / value);
     });
@@ -41,11 +42,11 @@ class Currency {
   /*
   Utility function for formatting money values
    */
-  static money(num) {
-    return Number((num).toFixed(2,10));
-
+  static money(num, precision = 2) {
+    return Number((num).toFixed(precision, 10));
   }
 }
+Currency.cachingTime = null;
 Currency.cached = null;
 Currency.prototype.name = null;
 Currency.prototype.rate = null;

@@ -6,7 +6,6 @@ const router = express.Router();
 
 
 function getRows() {
-  const money = (num) => Number((num).toFixed(2,10));
   const positions = models.Position.all();
 
   return positions.map((position) => {
@@ -14,9 +13,9 @@ function getRows() {
     const currency = position.currency();
     return { financialUnitName,
       notionalValue: position.notionalValue,
-      currencyRate: money(currency.rate),
+      currencyRate: models.Currency.money(currency.rate, 5),
       currencyName: currency.name,
-      calculatedValueUSD: money(position.calculatedValueUSD()),
+      calculatedValueUSD: models.Currency.money(position.calculatedValueUSD()),
     };
   });
 }
