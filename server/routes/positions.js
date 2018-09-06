@@ -1,5 +1,5 @@
 const express = require('express');
-const Position = require('./../models/Position');
+const models = require('./../models');
 const initCurrencyMiddleware = require('./../middlewares/initCurrencyMiddleware');
 
 const router = express.Router();
@@ -7,7 +7,7 @@ const router = express.Router();
 function list(req, res) {
 
   const money = (num) => Number((num).toFixed(2,10));
-  const positions = Position.all();
+  const positions = models.Position.all();
 
   const rows = positions.map((position) => {
     const financialUnitName = position.financialUnit().name;

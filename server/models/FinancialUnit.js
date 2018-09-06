@@ -1,4 +1,5 @@
 const FinancialUnitsJson = require('./../data/financial_units');
+const models = require('.');
 
 class FinancialUnit {
   constructor(id, name) {
@@ -19,7 +20,7 @@ class FinancialUnit {
 
 
   positions() {
-    return Position.all()
+    return models.Position.all()
       .filter((position) => position.financialUnitId === this.id);
   }
 
@@ -38,4 +39,3 @@ FinancialUnit.prototype.id = null;
 FinancialUnit.prototype.name = null;
 
 module.exports = FinancialUnit;
-const Position = require('./Position');
