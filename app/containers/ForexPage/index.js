@@ -51,17 +51,18 @@ export class ForexPage extends React.PureComponent {
           />
         </Helmet>
         { this.props.spinnerTimeFinished ? '' : <LoadingIndicator /> }
+        <h2>Created By: Natan Rubinstein</h2>
         <div>
           <h3>{`Last Refresh: ${this.props.refreshTime}`}</h3>
         </div>
         <div>
           <a href={'/positions/csv'}>Export to Excel</a>
           <h3>Positions</h3>
-          <JsonTable columns={positionsColumns} rows={ this.props.positions } />
+          <JsonTable columns={positionsColumns} rows={this.props.positions} />
         </div>
         <div>
           <h3>Units</h3>
-          <JsonTable columns={unitsColumns} rows={ this.props.units } />
+          <JsonTable columns={unitsColumns} rows={this.props.units} />
         </div>
 
       </article>
