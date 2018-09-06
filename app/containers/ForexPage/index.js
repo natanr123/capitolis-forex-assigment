@@ -26,16 +26,24 @@ export class ForexPage extends React.PureComponent {
 
   componentDidMount() {
     this.props.loadPosition();
+    this.props.loadUnits();
   }
 
   render() {
-    const columns1 = [
+    const positionsColumns = [
       { key: 'financialUnitName', label: 'Financial Unit Name' },
       { key: 'notionalValue', label: 'Notional Value' },
       { key: 'currencyRate', label: 'Rate' },
       { key: 'currencyName', label: 'Currency' },
       { key: 'calculatedValueUSD', label: 'Calculated Value (in USD)' },
     ];
+
+    const unitsColumns = [
+      { key: 'name', label: 'Name' },
+      { key: 'positionsCount', label: 'Positions Count' },
+      { key: 'positionsSum', label: 'Positions Sum (in USD)' },
+    ];
+
 
     return (
       <article>
@@ -48,8 +56,13 @@ export class ForexPage extends React.PureComponent {
         </Helmet>
         <div>
           <h3>Positions</h3>
-          <JsonTable columns={columns1} rows={ this.props.positions } />
+          <JsonTable columns={positionsColumns} rows={ this.props.positions } />
         </div>
+        <div>
+          <h3>Units</h3>
+          <JsonTable columns={unitsColumns} rows={ this.props.units } />
+        </div>
+
       </article>
     );
   }
@@ -61,18 +74,24 @@ export function mapDispatchToProps(dispatch) {
   return {
     loadPosition: () => {
       dispatch(actions.loadPositions());
+    },
+    loadUnits: () => {
+      dispatch(actions.loadUnits());
     }
   };
 }
 
 ForexPage.propTypes = {
   loadPosition: PropTypes.func,
-  positions: PropTypes.array,
+  loadUnits: PropTypes.func,
+  positions: PropTypes.any,
+  units: PropTypes.any,
 };
 
 const mapStateToProps = (state, ownProps) => {
   return {
     positions: state.get('forex').get('positions'),
+    units: state.get('forex').get('units'),
   };
 };
 

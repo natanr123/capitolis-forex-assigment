@@ -14,3 +14,17 @@ export function positionsLoaded(positions) {
     positions
   };
 }
+
+export function loadUnits() {
+  return {
+    type: constants.LOAD_UNITS,
+  };
+}
+
+
+export function unitsLoaded(units) {
+  return {
+    type: constants.UNITS_LOADED,
+    units
+  };
+}

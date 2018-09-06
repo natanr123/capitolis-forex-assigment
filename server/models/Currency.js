@@ -35,6 +35,14 @@ class Currency {
   static find(name) {
     return Currency.all().find((currency) => name === currency.name);
   }
+
+  /*
+  Utility function for formatting money values
+   */
+  static money(num) {
+    return Number((num).toFixed(2,10));
+
+  }
 }
 Currency.cached = null;
 Currency.prototype.name = null;
