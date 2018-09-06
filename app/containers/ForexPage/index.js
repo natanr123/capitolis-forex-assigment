@@ -12,6 +12,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
+import LoadingIndicator from 'components/LoadingIndicator';
 import reducer from './reducer';
 import loadProblemWatcher from './saga';
 import * as actions from './actions';
@@ -20,6 +21,7 @@ import * as actions from './actions';
 export class ForexPage extends React.PureComponent {
 
   componentDidMount() {
+    this.props.startSpinner(3000);
     this.props.startRefreshCycle(10000);
   }
 
@@ -48,10 +50,12 @@ export class ForexPage extends React.PureComponent {
             content="Positions page"
           />
         </Helmet>
-        <p>
-          <h3>{`Last Refresh: ${this.props.refreshTime}`}</h3>
-        </p>
+        { this.props.spinnerTimeFinished ? '' : <LoadingIndicator /> }
         <div>
+          <h3>{`Last Refresh: ${this.props.refreshTime}`}</h3>
+        </div>
+        <div>
+          <a href={'/positions/csv'}>Export to Excel</a>
           <h3>Positions</h3>
           <JsonTable columns={positionsColumns} rows={ this.props.positions } />
         </div>
@@ -63,41 +67,33 @@ export class ForexPage extends React.PureComponent {
       </article>
     );
   }
-
-
 }
 
 export function mapDispatchToProps(dispatch) {
   return {
-    loadPosition: () => {
-      dispatch(actions.loadPositions());
-    },
-    loadUnits: () => {
-      dispatch(actions.loadUnits());
-    },
     startRefreshCycle: (interval) => {
       dispatch(actions.startRefreshCycle(interval));
     },
+    startSpinner: (delay) => {
+      dispatch(actions.startSpinner(delay));
+    }
   };
 }
 
-
-const mapStateToProps = (state) => {
-  return {
-    positions: state.get('forex').get('positions'),
-    units: state.get('forex').get('units'),
-    refreshTime: state.get('forex').get('refreshTime'),
-  };
-};
-
+const mapStateToProps = (state) => ({
+  positions: state.get('forex').get('positions'),
+  units: state.get('forex').get('units'),
+  refreshTime: state.get('forex').get('refreshTime'),
+  spinnerTimeFinished: state.get('forex').get('spinnerTimeFinished'),
+});
 
 ForexPage.propTypes = {
-  loadPosition: PropTypes.func,
-  loadUnits: PropTypes.func,
   startRefreshCycle: PropTypes.func,
   positions: PropTypes.any,
   units: PropTypes.any,
-  refreshTime: PropTypes.number,
+  refreshTime: PropTypes.any,
+  spinnerTimeFinished: PropTypes.bool,
+  startSpinner: PropTypes.func,
 };
 
 const withConnect = connect(

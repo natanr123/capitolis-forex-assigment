@@ -30,11 +30,18 @@ export function* startRefreshCycleWorker(action) {
   yield call(delay, action.interval);
   yield put(actions.startRefreshCycle(action.interval));
 }
+
+export function* startSpinnerWorker(action) {
+  yield call(delay, action.delay);
+  yield put(actions.spinnerTimeFinished());
+}
+
 export default function* watcher() {
   yield [
     takeLatest(constants.LOAD_POSITIONS, loadPositionsWorker),
     takeLatest(constants.LOAD_UNITS, loadUnitsWorker),
     takeLatest(constants.START_REFRESH_CYCLE, startRefreshCycleWorker),
+    takeLatest(constants.START_SPINNER, startSpinnerWorker),
 
   ];
 }

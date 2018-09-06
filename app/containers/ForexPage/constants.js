@@ -17,3 +17,9 @@ export const START_REFRESH_CYCLE =
 export const REFRESHED =
   'boilerplate/ForexPage/REFRESHED';
 
+export const START_SPINNER =
+  'boilerplate/ForexPage/START_SPINNER';
+
+export const SPINNER_TINE_FINISHED =
+  'boilerplate/ForexPage/SPINNER_TINE_FINISHED';
+

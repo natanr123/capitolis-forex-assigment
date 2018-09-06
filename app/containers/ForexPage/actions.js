@@ -42,3 +42,16 @@ export function refreshed() {
     refreshTime: new Date(),
   };
 }
+
+export function startSpinner(delay) {
+  return {
+    type: constants.START_SPINNER,
+    delay,
+  };
+}
+
+export function spinnerTimeFinished() {
+  return {
+    type: constants.SPINNER_TINE_FINISHED,
+  };
+}

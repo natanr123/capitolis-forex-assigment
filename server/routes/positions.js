@@ -4,12 +4,12 @@ const initCurrencyMiddleware = require('./../middlewares/initCurrencyMiddleware'
 
 const router = express.Router();
 
-function list(req, res) {
 
+function getRows() {
   const money = (num) => Number((num).toFixed(2,10));
   const positions = models.Position.all();
 
-  const rows = positions.map((position) => {
+  return positions.map((position) => {
     const financialUnitName = position.financialUnit().name;
     const currency = position.currency();
     return { financialUnitName,
@@ -19,9 +19,24 @@ function list(req, res) {
       calculatedValueUSD: money(position.calculatedValueUSD()),
     };
   });
-  res.send(rows);
+}
+
+function list(req, res) {
+  res.send(getRows());
+}
+
+function csv(req, res) {
+  const csvArr = getRows().map((row) => {
+    return Object.values(row).join(',');
+  });
+  csvArr.unshift(['Financial Unit Name', 'Notional Value', 'Rate', 'Currency', 'Calculated Value (in USD)']);
+  const csvText = csvArr.join('\r\n');
+  res.setHeader('Content-disposition', `attachment; filename=positions_${Date.now()}.csv`);
+  res.set('Content-Type', 'text/csv');
+  res.status(200).send(csvText);
 }
 
 
 router.get('/', initCurrencyMiddleware, list);
+router.get('/csv', initCurrencyMiddleware, csv);
 module.exports = router;
